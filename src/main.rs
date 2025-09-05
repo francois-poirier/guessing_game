@@ -1,0 +1,36 @@
+use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
+use colored::*;
+
+fn main() {
+
+    let mut rng = rand::rng();
+    let secret_number: i32 = rng.random_range(1..=101);
+    println!("The secret number is : {}", secret_number);
+
+    loop {
+        println!("Guess the number!");
+        println!("Please input your guess.");
+
+        let mut guess= String::new();
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+
+        let guess: i32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
+
+        println!("You guessed: {}", guess);
+        match guess.cmp(&secret_number){
+            Ordering::Less => println!("{}" ,"Too small!".red()),
+            Ordering::Greater => println!("{}" ,"Too big!".red()),
+            Ordering::Equal => {
+                println!("{}" ,"You win!".green());
+                break;
+            }
+        }
+    }
+}
